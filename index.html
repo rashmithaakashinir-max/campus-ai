@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EduVoice AI Pro</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    500:'#6366f1',
+                    600:'#4f46e5',
+                    700:'#4338ca'
+                }
+            }
+        }
+    }
+}
+</script>
+
+<style>
+
+@import url(
+'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap'
+);
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.custom-scrollbar::-webkit-scrollbar{
+    width:5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:10px;
+}
+
+.glass{
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(12px);
+}
+
+.dark .glass{
+    background:rgba(15,23,42,.9);
+}
+
+
+        .login-card {
+            animation: loginSlideUp .6s ease;
+        }
+
+        @keyframes loginSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-input {
+            transition: .2s;
+        }
+
+        .login-input:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+        }
+</style>
+</head>
+
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-white">
+
+
+<!-- =====================================================
+LOGIN
+===================================================== -->
+
+<div id="loginOverlay"
+class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
+
+    <div class="login-card bg-white dark:bg-slate-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+
+        <!-- LOGIN HEADER -->
+        <div class="bg-gradient-to-r from-indigo-700 to-purple-600 p-8 text-white text-center">
+
+            <div class="w-16 h-16 bg-white/15 rounded-2xl
+                        flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-graduation-cap text-3xl"></i>
+            </div>
+
+            <h1 class="text-2xl font-extrabold">
+                EduVoice AI Pro
+            </h1>
+
+            <p class="text-sm text-indigo-100 mt-2">
+                AI-Powered Campus Grievance Resolution
+            </p>
+
+        </div>
+
+        <!-- LOGIN / REGISTER TABS -->
+        <div class="flex border-b bg-white dark:bg-slate-800">
+
+            <button
+                id="loginTab"
+                type="button"
+                onclick="switchAuth('login')"
+                class="flex-1 py-4 text-xs font-bold text-indigo-600 border-b-2 border-indigo-600">
+                Student Login
+            </button>
+
+            <button
+                id="registerTab"
+                type="button"
+                onclick="switchAuth('register')"
+                class="flex-1 py-4 text-xs font-bold text-slate-500">
+                New Registration
+            </button>
+
+        </div>
+
+        <!-- FORM -->
+        <form id="authForm"
+              onsubmit="loginUser(event)"
+              class="p-7 space-y-4"
+              novalidate>
+
+            <!-- Student Name -->
+            <div>
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Student Name
+                </label>
+
+                <div class="relative mt-1">
+                    <i class="fa-solid fa-user absolute left-4 top-1/2
+                              -translate-y-1/2 text-slate-400 text-sm"></i>
+
+                    <input
+                        id="authName"
+                        type="text"
+                        placeholder="Enter your name"
+                        class="login-input w-full pl-11 pr-4 py-3 rounded-xl
+                               border border-slate-200 dark:border-slate-700
+                               bg-slate-50 dark:bg-slate-900 outline-none
+                               focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Email Address
+                </label>
+
+                <div class="relative mt-1">
+                    <i class="fa-solid fa-envelope absolute left-4 top-1/2
+                              -translate-y-1/2 text-slate-400 text-sm"></i>
+
+                    <input
+                        id="authEmail"
+                        type="email"
+                        placeholder="student@college.edu"
+                        class="login-input w-full pl-11 pr-4 py-3 rounded-xl
+                               border border-slate-200 dark:border-slate-700
+                               bg-slate-50 dark:bg-slate-900 outline-none
+                               focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+            </div>
+
+            <!-- College -->
+            <div>
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    College Name
+                </label>
+
+                <div class="relative mt-1">
+                    <i class="fa-solid fa-building-columns absolute left-4 top-1/2
+                              -translate-y-1/2 text-slate-400 text-sm"></i>
+
+                    <input
+                        id="authCollege"
+                        type="text"
+                        placeholder="Enter college name"
+                        class="login-input w-full pl-11 pr-4 py-3 rounded-xl
+                               border border-slate-200 dark:border-slate-700
+                               bg-slate-50 dark:bg-slate-900 outline-none
+                               focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Mobile -->
+            <div id="mobileBox">
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Mobile Number
+                </label>
+
+                <div class="relative mt-1">
+                    <i class="fa-solid fa-phone absolute left-4 top-1/2
+                              -translate-y-1/2 text-slate-400 text-sm"></i>
+
+                    <input
+                        id="authMobile"
+                        type="tel"
+                        placeholder="9876543210"
+                        class="login-input w-full pl-11 pr-4 py-3 rounded-xl
+                               border border-slate-200 dark:border-slate-700
+                               bg-slate-50 dark:bg-slate-900 outline-none
+                               focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="text-xs font-bold text-slate-600 dark:text-slate-300">
+                    Password
+                </label>
+
+                <div class="relative mt-1">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2
+                              -translate-y-1/2 text-slate-400 text-sm"></i>
+
+                    <input
+                        id="authPassword"
+                        type="password"
+                        placeholder="Enter password"
+                        class="login-input w-full pl-11 pr-12 py-3 rounded-xl
+                               border border-slate-200 dark:border-slate-700
+                               bg-slate-50 dark:bg-slate-900 outline-none
+                               focus:ring-2 focus:ring-indigo-500 text-sm">
+
+                    <button
+                        type="button"
+                        onclick="toggleLoginPassword()"
+                        class="absolute right-4 top-1/2 -translate-y-1/2
+                               text-slate-400">
+
+                        <i id="loginEyeIcon" class="fa-solid fa-eye"></i>
+
+                    </button>
+                </div>
+            </div>
+
+            <!-- Remember / Forgot -->
+            <div class="flex items-center justify-between text-xs">
+
+                <label class="flex items-center gap-2 text-slate-500">
+                    <input type="checkbox" class="accent-indigo-600">
+                    Remember me
+                </label>
+
+                <button type="button"
+                        onclick="alert('Please contact your college administrator to reset your password.')"
+                        class="text-indigo-600 font-bold">
+                    Forgot Password?
+                </button>
+
+            </div>
+
+            <!-- LOGIN BUTTON -->
+            <button
+                id="authButton"
+                type="submit"
+                class="w-full py-3.5 rounded-xl
+                       bg-gradient-to-r from-indigo-600 to-purple-600
+                       hover:from-indigo-700 hover:to-purple-700
+                       text-white font-bold text-sm shadow-lg
+                       shadow-indigo-500/20 transition">
+
+                <i class="fa-solid fa-right-to-bracket mr-2"></i>
+                Enter Portal
+
+            </button>
+
+            <p class="text-center text-[10px] text-slate-400 pt-1">
+                You can enter with filled or empty fields.
+            </p>
+
+        </form>
+    </div>
+</div>
+
+<!-- =====================================================
+MAIN APPLICATION
+===================================================== -->
+
+<div id="mainApp" class="hidden min-h-screen">
+
+
+<!-- HEADER -->
+
+<header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-3">
+
+<div class="flex items-center justify-between">
+
+<div class="flex items-center gap-3">
+
+<button
+onclick="toggleSidebar()"
+class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+
+<i class="fa-solid fa-bars"></i>
+
+</button>
+
+
+<div class="flex items-center gap-3">
+
+<div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center">
+
+<i class="fa-solid fa-graduation-cap"></i>
+
+</div>
+
+<div>
+
+<p id="navCollege"
+class="font-black text-sm">
+
+College Portal
+
+</p>
+
+<p class="text-[10px] text-slate-400">
+
+EduVoice AI Active
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="flex items-center gap-3">
+
+
+<!-- DARK MODE -->
+
+<button
+onclick="toggleDark()"
+class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+
+<i class="fa-solid fa-moon dark:hidden"></i>
+
+<i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+
+</button>
+
+
+<!-- NOTIFICATION -->
+
+<div class="relative">
+
+<button
+onclick="toggleNotification()"
+class="relative p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+
+<i class="fa-regular fa-bell"></i>
+
+<span
+id="notificationBadge"
+class="absolute -top-1 -right-1 hidden min-w-5 h-5 bg-red-500 text-white rounded-full text-[9px] items-center justify-center">
+
+0
+
+</span>
+
+</button>
+
+
+<div
+id="notificationBox"
+class="hidden absolute right-0 top-12 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border dark:border-slate-700">
+
+<div class="p-4 border-b flex justify-between">
+
+<strong class="text-xs">
+Notifications
+</strong>
+
+<button
+onclick="markRead()"
+class="text-indigo-600 text-[10px] font-bold">
+
+Mark all read
+
+</button>
+
+</div>
+
+<div id="notificationList"
+class="max-h-80 overflow-y-auto">
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="relative">
+
+<button
+onclick="toggleProfile()"
+class="flex items-center gap-2">
+
+<div
+id="avatar"
+class="w-9 h-9 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold">
+
+S
+
+</div>
+
+<div class="hidden sm:block text-left">
+
+<p
+id="userName"
+class="text-xs font-bold">
+
+Student
+
+</p>
+
+<p class="text-[10px] text-indigo-500">
+Student Account
+</p>
+
+</div>
+
+<i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+
+</button>
+
+
+<div
+id="profileBox"
+class="hidden absolute right-0 top-12 w-60 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border dark:border-slate-700 p-2">
+
+<div class="p-3 border-b">
+
+<p id="profileEmail"
+class="text-xs font-bold">
+
+student@college.edu
+
+</p>
+
+<p id="profileCollege"
+class="text-[10px] text-indigo-500">
+
+College Portal
+
+</p>
+
+</div>
+
+<button
+onclick="logout()"
+class="w-full text-left p-3 text-xs text-red-500 font-bold">
+
+<i class="fa-solid fa-right-from-bracket mr-2"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+
+<!-- =====================================================
+LAYOUT
+===================================================== -->
+
+<div class="flex">
+
+
+<!-- SIDEBAR -->
+
+<aside
+id="sidebar"
+class="w-64 min-h-[calc(100vh-65px)] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 fixed lg:sticky top-[65px] -translate-x-full lg:translate-x-0 transition z-40">
+
+<nav class="space-y-2">
+
+
+<button onclick="navigate('home')" class="navBtn active">
+<i class="fa-solid fa-house"></i>
+Home Dashboard
+</button>
+
+
+<button onclick="navigate('submit')" class="navBtn">
+<i class="fa-solid fa-circle-plus"></i>
+Submit Grievance
+</button>
+
+
+<button onclick="navigate('complaints')" class="navBtn">
+<i class="fa-regular fa-folder-open"></i>
+My Complaints
+</button>
+
+
+<button onclick="navigate('status')" class="navBtn">
+<i class="fa-solid fa-route"></i>
+Status Lifecycle
+</button>
+
+
+<button onclick="navigate('bot')" class="navBtn">
+<i class="fa-solid fa-robot"></i>
+AI Grievance Bot
+</button>
+
+
+<button onclick="navigate('reports')" class="navBtn">
+<i class="fa-solid fa-chart-column"></i>
+Reports
+</button>
+
+
+<button onclick="navigate('admin')" class="navBtn">
+<i class="fa-solid fa-user-shield"></i>
+Admin Panel
+</button>
+
+</nav>
+
+</aside>
+
+
+<!-- CONTENT -->
+
+<main class="flex-1 p-4 lg:p-8">
+
+
+<!-- =====================================================
+HOME
+===================================================== -->
+
+<section id="homeView" class="view">
+
+
+<div class="bg-gradient-to-r from-indigo-700 to-purple-600 rounded-3xl p-7 lg:p-10 text-white mb-7">
+
+<p class="text-xs uppercase font-bold opacity-80">
+AI-Powered College Complaint Classifier
+</p>
+
+<h1 class="text-3xl lg:text-4xl font-black mt-2">
+A Smarter Way to a Better Campus
+</h1>
+
+<p class="text-sm text-indigo-100 mt-2 max-w-2xl">
+Submit your campus grievance and let AI automatically identify the category, urgency and responsible department.
+</p>
+
+</div>
+
+
+<!-- QUICK COMPLAINT -->
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border dark:border-slate-800 mb-7">
+
+<div class="flex items-center justify-between mb-4">
+
+<div>
+
+<h2 class="font-black text-lg">
+Quick Complaint
+</h2>
+
+<p class="text-xs text-slate-400">
+Describe your problem
+</p>
+
+</div>
+
+<span
+id="aiBadge"
+class="px-3 py-1.5 rounded-full text-xs bg-slate-100 text-slate-500">
+
+<i class="fa-solid fa-robot"></i>
+AI Waiting
+
+</span>
+
+</div>
+
+
+<textarea
+id="quickComplaint"
+oninput="analyzeQuick()"
+rows="4"
+placeholder="Example: Hostel bathroom water leakage..."
+class="w-full p-4 rounded-2xl border bg-slate-50 dark:bg-slate-800 dark:border-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></textarea>
+
+
+<div class="flex justify-end mt-4">
+
+<button
+onclick="submitQuick()"
+class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs">
+
+<i class="fa-solid fa-paper-plane mr-2"></i>
+
+Submit Complaint
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- AI RESULT -->
+
+<div
+id="aiResult"
+class="hidden grid md:grid-cols-4 gap-4 mb-7">
+
+<div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border dark:border-slate-800">
+
+<p class="text-[10px] uppercase text-slate-400 font-bold">
+Category
+</p>
+
+<p id="aiCategory" class="font-black mt-1">
+-
+</p>
+
+</div>
+
+
+<div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border dark:border-slate-800">
+
+<p class="text-[10px] uppercase text-slate-400 font-bold">
+Priority
+</p>
+
+<p id="aiPriority" class="font-black mt-1">
+-
+</p>
+
+</div>
+
+
+<div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border dark:border-slate-800">
+
+<p class="text-[10px] uppercase text-slate-400 font-bold">
+Department
+</p>
+
+<p id="aiDepartment" class="font-black mt-1">
+-
+</p>
+
+</div>
+
+
+<div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border dark:border-slate-800">
+
+<p class="text-[10px] uppercase text-slate-400 font-bold">
+Stress Score
+</p>
+
+<p id="aiStress" class="font-black mt-1">
+-
+</p>
+
+</div>
+
+</div>
+
+
+<!-- CATEGORIES -->
+
+<h2 class="font-black text-lg mb-4">
+Complaint Categories
+</h2>
+
+
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+
+
+<button onclick="categorySelect('Hostel')"
+class="categoryCard">
+
+<i class="fa-solid fa-bed"></i>
+<span>Hostel</span>
+
+</button>
+
+
+<button onclick="categorySelect('Transport')"
+class="categoryCard">
+
+<i class="fa-solid fa-bus"></i>
+<span>Transport</span>
+
+</button>
+
+
+<button onclick="categorySelect('Canteen')"
+class="categoryCard">
+
+<i class="fa-solid fa-utensils"></i>
+<span>Canteen</span>
+
+</button>
+
+
+<button onclick="categorySelect('Faculty')"
+class="categoryCard">
+
+<i class="fa-solid fa-chalkboard-user"></i>
+<span>Faculty</span>
+
+</button>
+
+
+<button onclick="categorySelect('Infrastructure')"
+class="categoryCard">
+
+<i class="fa-solid fa-building"></i>
+<span>Infrastructure</span>
+
+</button>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="grid md:grid-cols-4 gap-4 mb-8">
+
+
+<div class="statCard">
+<p>Total Complaints</p>
+<strong id="totalStat">0</strong>
+</div>
+
+
+<div class="statCard">
+<p>Resolved</p>
+<strong id="resolvedStat">0</strong>
+</div>
+
+
+<div class="statCard">
+<p>Pending</p>
+<strong id="pendingStat">0</strong>
+</div>
+
+
+<div class="statCard">
+<p>Critical</p>
+<strong id="criticalStat">0</strong>
+</div>
+
+</div>
+
+
+<!-- RECENT -->
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border dark:border-slate-800">
+
+<div class="flex justify-between mb-5">
+
+<h2 class="font-black">
+Recent Complaints
+</h2>
+
+<button
+onclick="navigate('complaints')"
+class="text-xs text-indigo-600 font-bold">
+
+View All
+
+</button>
+
+</div>
+
+<div id="recentComplaints"></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+SUBMIT
+===================================================== -->
+
+<section id="submitView" class="view hidden">
+
+
+<h1 class="text-2xl font-black">
+Submit Grievance
+</h1>
+
+<p class="text-xs text-slate-400 mb-6">
+AI will classify your complaint automatically.
+</p>
+
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border dark:border-slate-800">
+
+<form onsubmit="submitFull(event)">
+
+
+<label class="label">
+Complaint Title
+</label>
+
+<input
+id="fullTitle"
+class="input"
+placeholder="Complaint title">
+
+
+<label class="label">
+Description
+</label>
+
+<textarea
+id="fullDescription"
+oninput="previewFullAI()"
+rows="7"
+class="input"
+placeholder="Explain your problem in detail"></textarea>
+
+
+<div class="grid md:grid-cols-2 gap-4">
+
+<div>
+
+<label class="label">
+Category
+</label>
+
+<select id="fullCategory" class="input">
+
+<option>Auto Detect</option>
+<option>Hostel</option>
+<option>Transport</option>
+<option>Canteen</option>
+<option>Faculty</option>
+<option>Infrastructure</option>
+<option>Exam/Fee</option>
+<option>Ragging/Safety</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label class="label">
+Priority
+</label>
+
+<select id="fullPriority" class="input">
+
+<option>Auto</option>
+<option>Critical</option>
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div
+id="fullAIInfo"
+class="mt-5 p-4 bg-indigo-50 dark:bg-indigo-950/30 rounded-2xl text-xs">
+
+AI Analysis will appear here.
+
+</div>
+
+
+<button
+class="mt-5 w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold text-xs">
+
+<i class="fa-solid fa-paper-plane mr-2"></i>
+
+Submit Grievance
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+MY COMPLAINTS
+===================================================== -->
+
+<section id="complaintsView" class="view hidden">
+
+<div class="flex justify-between mb-6">
+
+<div>
+
+<h1 class="text-2xl font-black">
+My Complaints
+</h1>
+
+<p class="text-xs text-slate-400">
+Track all submitted grievances
+</p>
+
+</div>
+
+<select
+id="statusFilter"
+onchange="renderComplaints()"
+class="input w-40">
+
+<option>All</option>
+<option>Pending</option>
+<option>In Progress</option>
+<option>Resolved</option>
+<option>Rejected</option>
+
+</select>
+
+</div>
+
+
+<div id="complaintGrid"
+class="grid md:grid-cols-2 gap-5">
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+STATUS
+===================================================== -->
+
+<section id="statusView" class="view hidden">
+
+<h1 class="text-2xl font-black">
+Status Lifecycle
+</h1>
+
+<p class="text-xs text-slate-400 mb-6">
+Track your grievance progress.
+</p>
+
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border dark:border-slate-800">
+
+<select
+id="ticketSelect"
+onchange="renderStatus()"
+class="input mb-8">
+
+</select>
+
+
+<div id="timeline"></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+BOT
+===================================================== -->
+
+<section id="botView" class="view hidden">
+
+<h1 class="text-2xl font-black">
+AI Grievance Assistant
+</h1>
+
+<p class="text-xs text-slate-400 mb-6">
+Ask anything about your grievance.
+</p>
+
+
+<div class="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-3xl overflow-hidden">
+
+<div
+id="chatBox"
+class="h-[450px] overflow-y-auto p-6 space-y-4 custom-scrollbar">
+
+<div class="flex gap-3">
+
+<div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+
+<i class="fa-solid fa-robot"></i>
+
+</div>
+
+<div class="bg-indigo-50 dark:bg-indigo-950/40 p-3 rounded-2xl text-xs">
+
+Hello! I'm EduVoice AI. How can I help you?
+
+</div>
+
+</div>
+
+</div>
+
+
+<form
+onsubmit="sendBot(event)"
+class="border-t p-4 flex gap-3">
+
+<input
+id="botInput"
+class="input flex-1"
+placeholder="Type your question...">
+
+<button
+class="px-5 bg-indigo-600 text-white rounded-xl">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+REPORTS
+===================================================== -->
+
+<section id="reportsView" class="view hidden">
+
+<h1 class="text-2xl font-black mb-6">
+Campus Reports
+</h1>
+
+
+<div class="grid md:grid-cols-2 gap-6">
+
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border dark:border-slate-800">
+
+<h3 class="font-bold text-sm mb-4">
+Complaint Distribution
+</h3>
+
+<div class="h-72">
+
+<canvas id="categoryChart"></canvas>
+
+</div>
+
+</div>
+
+
+<div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border dark:border-slate-800">
+
+<h3 class="font-bold text-sm mb-4">
+Priority Breakdown
+</h3>
+
+<div class="h-72">
+
+<canvas id="priorityChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+ADMIN
+===================================================== -->
+
+<section id="adminView" class="view hidden">
+
+<h1 class="text-2xl font-black">
+Admin Portal
+</h1>
+
+<p class="text-xs text-slate-400 mb-6">
+Manage campus grievances.
+</p>
+
+
+<div class="bg-white dark:bg-slate-900 rounded-3xl border dark:border-slate-800 p-5 overflow-x-auto">
+
+<table class="w-full text-left">
+
+<thead>
+
+<tr class="border-b text-xs text-slate-400">
+
+<th class="p-3">ID</th>
+<th class="p-3">Student</th>
+<th class="p-3">Complaint</th>
+<th class="p-3">Category</th>
+<th class="p-3">Priority</th>
+<th class="p-3">Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="adminTable"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+STYLES
+===================================================== -->
+
+<style>
+
+.navBtn{
+
+width:100%;
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 15px;
+border-radius:15px;
+font-size:12px;
+font-weight:700;
+color:#64748b;
+text-align:left;
+
+}
+
+.navBtn:hover{
+
+background:#f1f5f9;
+color:#4f46e5;
+
+}
+
+.dark .navBtn:hover{
+
+background:#1e293b;
+
+}
+
+.navBtn.active{
+
+background:#eef2ff;
+color:#4f46e5;
+
+}
+
+.dark .navBtn.active{
+
+background:#312e81;
+color:white;
+
+}
+
+
+.categoryCard{
+
+background:white;
+border:1px solid #e2e8f0;
+padding:22px 10px;
+border-radius:20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:10px;
+font-size:12px;
+font-weight:800;
+transition:.2s;
+
+}
+
+.dark .categoryCard{
+
+background:#0f172a;
+border-color:#1e293b;
+
+}
+
+.categoryCard i{
+
+font-size:22px;
+color:#6366f1;
+
+}
+
+.categoryCard:hover{
+
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+.statCard{
+
+background:white;
+border:1px solid #e2e8f0;
+padding:22px;
+border-radius:20px;
+
+}
+
+.dark .statCard{
+
+background:#0f172a;
+border-color:#1e293b;
+
+}
+
+.statCard p{
+
+font-size:10px;
+font-weight:800;
+text-transform:uppercase;
+color:#94a3b8;
+
+}
+
+.statCard strong{
+
+font-size:28px;
+font-weight:900;
+display:block;
+margin-top:5px;
+
+}
+
+
+.input{
+
+width:100%;
+padding:12px 14px;
+border-radius:12px;
+border:1px solid #e2e8f0;
+background:#f8fafc;
+outline:none;
+font-size:12px;
+margin-top:5px;
+margin-bottom:15px;
+
+}
+
+.dark .input{
+
+background:#0f172a;
+border-color:#334155;
+color:white;
+
+}
+
+.label{
+
+display:block;
+font-size:11px;
+font-weight:800;
+color:#64748b;
+margin-top:8px;
+
+}
+
+</style>
+
+
+<!-- =====================================================
+JAVASCRIPT
+===================================================== -->
+
+<script>
+
+let authMode = "login";
+
+let currentUser =
+JSON.parse(sessionStorage.getItem("eduvoice_user")) || null;
+
+// Remove old saved login so the login page appears correctly on first open
+localStorage.removeItem("eduvoice_user");
+
+let complaints =
+JSON.parse(localStorage.getItem("eduvoice_complaints")) || [];
+
+let notifications =
+JSON.parse(localStorage.getItem("eduvoice_notifications")) || [];
+
+let categoryChart;
+let priorityChart;
+
+
+function toggleLoginPassword(){
+
+    const password = document.getElementById("authPassword");
+    const eye = document.getElementById("loginEyeIcon");
+
+    if(password.type === "password"){
+        password.type = "text";
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
+    }else{
+        password.type = "password";
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+    }
+}
+
+/* =====================================================
+AUTH
+===================================================== */
+
+function switchAuth(mode){
+
+authMode = mode;
+
+const mobile = document.getElementById("mobileBox");
+
+if(mode === "register"){
+
+mobile.classList.remove("hidden");
+
+document.getElementById("registerTab").className =
+"flex-1 py-4 text-xs font-bold text-indigo-600 border-b-2 border-indigo-600";
+
+document.getElementById("loginTab").className =
+"flex-1 py-4 text-xs font-bold text-slate-500";
+
+document.getElementById("authButton").innerText =
+"Register Account";
+
+}else{
+
+// Mobile number is kept visible on the login page too.
+mobile.classList.remove("hidden");
+
+document.getElementById("loginTab").className =
+"flex-1 py-4 text-xs font-bold text-indigo-600 border-b-2 border-indigo-600";
+
+document.getElementById("registerTab").className =
+"flex-1 py-4 text-xs font-bold text-slate-500";
+
+document.getElementById("authButton").innerText =
+"Enter Portal";
+
+}
+
+}
+
+
+function loginUser(e){
+
+e.preventDefault();
+
+// Clear any previous session before creating the current login session.
+sessionStorage.removeItem("eduvoice_user");
+
+const name =
+document.getElementById("authName").value.trim();
+
+const email =
+document.getElementById("authEmail").value.trim();
+
+const college =
+document.getElementById("authCollege").value.trim();
+
+const mobile =
+document.getElementById("authMobile").value.trim();
+
+
+/*
+
+IMPORTANT:
+
+Empty fields also allowed.
+
+*/
+
+currentUser = {
+
+name:name || "Guest Student",
+
+email:email || "guest@college.edu",
+
+college:college || "College Portal",
+
+mobile:mobile || "",
+
+role:"student"
+
+};
+
+
+sessionStorage.setItem(
+"eduvoice_user",
+JSON.stringify(currentUser)
+);
+
+
+document.getElementById("loginOverlay")
+.classList.add("hidden");
+
+document.getElementById("mainApp")
+.classList.remove("hidden");
+
+
+updateUserUI();
+
+addNotification(
+"Welcome to EduVoice AI Pro!"
+);
+
+renderAll();
+
+}
+
+
+/* =====================================================
+USER UI
+===================================================== */
+
+function updateUserUI(){
+
+const name =
+currentUser?.name || "Guest Student";
+
+const email =
+currentUser?.email || "guest@college.edu";
+
+const college =
+currentUser?.college || "College Portal";
+
+
+document.getElementById("userName").innerText =
+name;
+
+document.getElementById("avatar").innerText =
+name.charAt(0).toUpperCase();
+
+document.getElementById("profileEmail").innerText =
+email;
+
+document.getElementById("profileCollege").innerText =
+college;
+
+document.getElementById("navCollege").innerText =
+college;
+
+}
+
+
+function logout(){
+
+sessionStorage.removeItem("eduvoice_user");
+
+currentUser = null;
+
+document.getElementById("mainApp")
+.classList.add("hidden");
+
+document.getElementById("loginOverlay")
+.classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function navigate(page){
+
+document.querySelectorAll(".view")
+.forEach(v => v.classList.add("hidden"));
+
+document.getElementById(page + "View")
+.classList.remove("hidden");
+
+
+document.querySelectorAll(".navBtn")
+.forEach(btn => btn.classList.remove("active"));
+
+
+if(window.innerWidth < 1024){
+
+document.getElementById("sidebar")
+.classList.add("-translate-x-full");
+
+}
+
+if(page === "complaints")
+renderComplaints();
+
+if(page === "status")
+renderStatusSelect();
+
+if(page === "reports")
+renderCharts();
+
+if(page === "admin")
+renderAdmin();
+
+}
+
+
+/* =====================================================
+SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+const sidebar =
+document.getElementById("sidebar");
+
+sidebar.classList.toggle("-translate-x-full");
+
+}
+
+
+/* =====================================================
+DARK MODE
+===================================================== */
+
+function toggleDark(){
+
+document.documentElement
+.classList.toggle("dark");
+
+}
+
+
+/* =====================================================
+PROFILE
+===================================================== */
+
+function toggleProfile(){
+
+document.getElementById("profileBox")
+.classList.toggle("hidden");
+
+document.getElementById("notificationBox")
+.classList.add("hidden");
+
+}
+
+
+/* =====================================================
+NOTIFICATIONS
+===================================================== */
+
+function toggleNotification(){
+
+document.getElementById("notificationBox")
+.classList.toggle("hidden");
+
+document.getElementById("profileBox")
+.classList.add("hidden");
+
+renderNotifications();
+
+}
+
+
+function addNotification(text){
+
+notifications.unshift({
+
+id:Date.now(),
+
+text:text,
+
+read:false,
+
+time:"Just now"
+
+});
+
+localStorage.setItem(
+"eduvoice_notifications",
+JSON.stringify(notifications)
+);
+
+renderNotifications();
+
+}
+
+
+function renderNotifications(){
+
+const list =
+document.getElementById("notificationList");
+
+const unread =
+notifications.filter(n => !n.read).length;
+
+
+const badge =
+document.getElementById("notificationBadge");
+
+
+if(unread > 0){
+
+badge.innerText = unread;
+
+badge.classList.remove("hidden");
+
+badge.classList.add("flex");
+
+}else{
+
+badge.classList.add("hidden");
+
+}
+
+
+if(notifications.length === 0){
+
+list.innerHTML = `
+<div class="p-5 text-center text-xs text-slate-400">
+No notifications
+</div>
+`;
+
+return;
+
+}
+
+
+list.innerHTML =
+notifications.map(n => `
+
+<div class="p-4 border-b dark:border-slate-700
+${n.read ? "" : "bg-indigo-50 dark:bg-indigo-950/30"}">
+
+<div class="flex gap-3">
+
+<i class="fa-solid fa-bell text-indigo-500 text-xs mt-1"></i>
+
+<div>
+
+<p class="text-xs">
+${n.text}
+</p>
+
+<span class="text-[10px] text-slate-400">
+${n.time}
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function markRead(){
+
+notifications.forEach(n => n.read = true);
+
+localStorage.setItem(
+"eduvoice_notifications",
+JSON.stringify(notifications)
+);
+
+renderNotifications();
+
+}
+
+
+/* =====================================================
+AI CLASSIFIER
+===================================================== */
+
+function classify(text){
+
+text = text.toLowerCase();
+
+let category = "Infrastructure";
+let priority = "Medium";
+let department = "Civil & Infrastructure Maintenance";
+let stress = 40;
+let sentiment = "Neutral";
+
+
+if(
+/fire|shock|electric|ragging|assault|harassment|emergency|danger|safety/
+.test(text)
+){
+
+priority = "Critical";
+stress = 95;
+sentiment = "Urgent";
+
+}
+
+
+else if(
+/leak|broken|overflow|rotten|dirty|stolen|delay|unsafe|fever/
+.test(text)
+){
+
+priority = "High";
+stress = 78;
+sentiment = "Frustrated";
+
+}
+
+
+else if(
+/request|inquiry|change|timing|update/
+.test(text)
+){
+
+priority = "Low";
+stress = 25;
+sentiment = "Calm";
+
+}
+
+
+/* CATEGORY */
+
+
+if(
+/hostel|room|bed|washroom|toilet|bathroom|geyser|warden|mess/
+.test(text)
+){
+
+category = "Hostel";
+
+department =
+"Hostel Warden & Maintenance";
+
+}
+
+
+else if(
+/bus|transport|driver|route|stop|seat|cab/
+.test(text)
+){
+
+category = "Transport";
+
+department =
+"Transport Cell";
+
+}
+
+
+else if(
+/food|canteen|meal|hygiene|taste|insect|cook/
+.test(text)
+){
+
+category = "Canteen";
+
+department =
+"Food & Hygiene Safety Committee";
+
+}
+
+
+else if(
+/teacher|faculty|professor|lecture|class|marks/
+.test(text)
+){
+
+category = "Faculty";
+
+department =
+"Academic Affairs Cell";
+
+}
+
+
+else if(
+/exam|fee|scholarship|dues|fine|receipt/
+.test(text)
+){
+
+category = "Exam/Fee";
+
+department =
+"Finance & Examination Desk";
+
+}
+
+
+else if(
+/ragging|fight|security|theft|guard|gate|harass/
+.test(text)
+){
+
+category = "Ragging/Safety";
+
+department =
+"Anti-Ragging Squad & Campus Safety";
+
+}
+
+
+return {
+
+category,
+priority,
+department,
+stress,
+sentiment
+
+};
+
+}
+
+
+/* =====================================================
+QUICK AI
+===================================================== */
+
+function analyzeQuick(){
+
+const text =
+document.getElementById("quickComplaint").value;
+
+if(!text.trim()){
+
+document.getElementById("aiResult")
+.classList.add("hidden");
+
+return;
+
+}
+
+
+const result = classify(text);
+
+document.getElementById("aiResult")
+.classList.remove("hidden");
+
+document.getElementById("aiCategory")
+.innerText = result.category;
+
+document.getElementById("aiPriority")
+.innerText = result.priority;
+
+document.getElementById("aiDepartment")
+.innerText = result.department;
+
+document.getElementById("aiStress")
+.innerText =
+result.stress + "%";
+
+
+document.getElementById("aiBadge").innerHTML =
+`<i class="fa-solid fa-bolt"></i>
+AI Detected: ${result.category}`;
+
+}
+
+
+/* =====================================================
+SUBMIT QUICK
+===================================================== */
+
+function submitQuick(){
+
+const text =
+document.getElementById("quickComplaint")
+.value.trim();
+
+if(!text){
+
+alert("Please enter your complaint.");
+
+return;
+
+}
+
+
+const result = classify(text);
+
+createComplaint(
+
+text.substring(0,50),
+
+text,
+
+result
+
+);
+
+document.getElementById("quickComplaint").value = "";
+
+document.getElementById("aiResult")
+.classList.add("hidden");
+
+}
+
+
+/* =====================================================
+FULL SUBMIT
+===================================================== */
+
+function previewFullAI(){
+
+const text =
+document.getElementById("fullDescription")
+.value;
+
+if(!text.trim()) return;
+
+const result = classify(text);
+
+document.getElementById("fullAIInfo").innerHTML = `
+
+<strong>AI Analysis</strong>
+
+<br><br>
+
+Category:
+<b>${result.category}</b>
+
+<br>
+
+Priority:
+<b>${result.priority}</b>
+
+<br>
+
+Department:
+<b>${result.department}</b>
+
+<br>
+
+Stress Score:
+<b>${result.stress}%</b>
+
+`;
+
+}
+
+
+function submitFull(e){
+
+e.preventDefault();
+
+const title =
+document.getElementById("fullTitle")
+.value.trim();
+
+const desc =
+document.getElementById("fullDescription")
+.value.trim();
+
+if(!desc){
+
+alert("Please enter complaint description.");
+
+return;
+
+}
+
+
+const result = classify(desc);
+
+const selectedCategory =
+document.getElementById("fullCategory")
+.value;
+
+const selectedPriority =
+document.getElementById("fullPriority")
+.value;
+
+
+if(selectedCategory !== "Auto Detect"){
+
+result.category = selectedCategory;
+
+}
+
+
+if(selectedPriority !== "Auto"){
+
+result.priority = selectedPriority;
+
+}
+
+
+createComplaint(
+title || desc.substring(0,50),
+desc,
+result
+);
+
+
+document.getElementById("fullTitle").value = "";
+
+document.getElementById("fullDescription").value = "";
+
+navigate("complaints");
+
+}
+
+
+/* =====================================================
+CREATE COMPLAINT
+===================================================== */
+
+function createComplaint(title,description,result){
+
+const complaint = {
+
+id:"C" + Math.floor(
+1000 + Math.random() * 9000
+),
+
+title:title,
+
+description:description,
+
+category:result.category,
+
+priority:result.priority,
+
+department:result.department,
+
+status:"Pending",
+
+stress:result.stress,
+
+sentiment:result.sentiment,
+
+student:currentUser?.name || "Guest Student",
+
+email:currentUser?.email || "guest@college.edu",
+
+date:new Date().toLocaleDateString(),
+
+response:""
+
+};
+
+
+complaints.unshift(complaint);
+
+
+localStorage.setItem(
+"eduvoice_complaints",
+JSON.stringify(complaints)
+);
+
+
+addNotification(
+`Complaint #${complaint.id} submitted successfully.`
+);
+
+
+renderAll();
+
+
+alert(
+`Complaint submitted successfully!\n\nTicket ID: ${complaint.id}`
+);
+
+}
+
+
+/* =====================================================
+CATEGORY SELECT
+===================================================== */
+
+function categorySelect(category){
+
+navigate("submit");
+
+document.getElementById("fullCategory")
+.value = category;
+
+}
+
+
+/* =====================================================
+COMPLAINT LIST
+===================================================== */
+
+function renderComplaints(){
+
+const grid =
+document.getElementById("complaintGrid");
+
+const filter =
+document.getElementById("statusFilter").value;
+
+
+let list = complaints;
+
+
+if(filter !== "All"){
+
+list =
+complaints.filter(c =>
+c.status === filter
+);
+
+}
+
+
+if(list.length === 0){
+
+grid.innerHTML = `
+
+<div class="col-span-2 text-center p-10 text-slate-400">
+
+<i class="fa-regular fa-folder-open text-3xl"></i>
+
+<p class="mt-3 text-xs">
+No complaints found.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+grid.innerHTML =
+list.map(c => `
+
+<div class="bg-white dark:bg-slate-900
+border dark:border-slate-800
+rounded-2xl p-5">
+
+<div class="flex justify-between">
+
+<div>
+
+<span class="text-xs font-black text-indigo-600">
+#${c.id}
+</span>
+
+<h3 class="font-bold text-sm mt-1">
+${c.title}
+</h3>
+
+</div>
+
+<span class="text-[10px] font-bold px-2 py-1 rounded-full
+${priorityClass(c.priority)}">
+
+${c.priority}
+
+</span>
+
+</div>
+
+
+<p class="text-xs text-slate-500 mt-3">
+${c.description}
+</p>
+
+
+<div class="grid grid-cols-2 gap-3 mt-4">
+
+<div>
+
+<p class="text-[9px] text-slate-400 uppercase">
+Category
+</p>
+
+<p class="text-xs font-bold">
+${c.category}
+</p>
+
+</div>
+
+
+<div>
+
+<p class="text-[9px] text-slate-400 uppercase">
+Status
+</p>
+
+<p class="text-xs font-bold">
+${c.status}
+</p>
+
+</div>
+
+</div>
+
+
+<div class="mt-4 pt-3 border-t
+dark:border-slate-700 text-[10px] text-slate-400">
+
+Department:
+${c.department}
+
+</div>
+
+
+${c.response ? `
+
+<div class="mt-3 p-3 bg-emerald-50
+dark:bg-emerald-950/30 rounded-xl">
+
+<p class="text-[10px] font-bold text-emerald-600">
+Admin Response
+</p>
+
+<p class="text-xs mt-1">
+${c.response}
+</p>
+
+</div>
+
+` : ""}
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =====================================================
+STATUS
+===================================================== */
+
+function renderStatusSelect(){
+
+const select =
+document.getElementById("ticketSelect");
+
+select.innerHTML =
+complaints.map(c => `
+
+<option value="${c.id}">
+#${c.id} - ${c.title}
+</option>
+
+`).join("");
+
+
+renderStatus();
+
+}
+
+
+function renderStatus(){
+
+const id =
+document.getElementById("ticketSelect").value;
+
+const c =
+complaints.find(x => x.id === id);
+
+
+if(!c){
+
+document.getElementById("timeline").innerHTML =
+"No complaints yet.";
+
+return;
+
+}
+
+
+const steps = [
+
+"Submitted",
+
+"AI Triage",
+
+"Department Assigned",
+
+"In Progress",
+
+"Resolved"
+
+];
+
+
+let current = 0;
+
+if(c.status === "Pending") current = 1;
+
+if(c.status === "In Progress") current = 3;
+
+if(c.status === "Resolved") current = 4;
+
+
+document.getElementById("timeline").innerHTML = `
+
+<div class="space-y-5">
+
+${steps.map((step,i)=>`
+
+<div class="flex items-center gap-4">
+
+<div class="w-9 h-9 rounded-full
+flex items-center justify-center
+${i <= current
+? "bg-emerald-500 text-white"
+: "bg-slate-200 dark:bg-slate-700 text-slate-400"}">
+
+${i <= current
+? '<i class="fa-solid fa-check"></i>'
+: i+1}
+
+</div>
+
+<div>
+
+<p class="font-bold text-sm">
+${step}
+</p>
+
+<p class="text-[10px] text-slate-400">
+${i <= current
+? "Completed"
+: "Waiting"}
+</p>
+
+</div>
+
+</div>
+
+`).join("")}
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+AI BOT
+===================================================== */
+
+function sendBot(e){
+
+e.preventDefault();
+
+const input =
+document.getElementById("botInput");
+
+const text =
+input.value.trim();
+
+if(!text) return;
+
+
+addChat("user",text);
+
+input.value = "";
+
+
+setTimeout(()=>{
+
+let reply =
+"I have received your query. You can submit a grievance from the Submit Grievance section.";
+
+
+const lower = text.toLowerCase();
+
+
+if(lower.includes("hostel")){
+
+reply =
+"Hostel complaints are routed to the Hostel Warden & Maintenance department.";
+
+}
+
+else if(lower.includes("ragging")){
+
+reply =
+"For ragging-related complaints, the system routes the issue to the Anti-Ragging Squad & Campus Safety department.";
+
+}
+
+else if(lower.includes("status")){
+
+reply =
+"You can check your complaint status from the Status Lifecycle section.";
+
+}
+
+else if(lower.includes("complaint")){
+
+reply =
+"Please describe your complaint. EduVoice AI will detect its category, priority and department.";
+
+}
+
+
+addChat("bot",reply);
+
+},500);
+
+}
+
+
+function addChat(sender,text){
+
+const chat =
+document.getElementById("chatBox");
+
+
+if(sender === "user"){
+
+chat.innerHTML += `
+
+<div class="flex justify-end">
+
+<div class="bg-indigo-600 text-white p-3 rounded-2xl text-xs max-w-[80%]">
+
+${text}
+
+</div>
+
+</div>
+
+`;
+
+}else{
+
+chat.innerHTML += `
+
+<div class="flex gap-3">
+
+<div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+
+<i class="fa-solid fa-robot"></i>
+
+</div>
+
+<div class="bg-indigo-50 dark:bg-indigo-950/40 p-3 rounded-2xl text-xs max-w-[80%]">
+
+${text}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* =====================================================
+REPORTS
+===================================================== */
+
+function renderCharts(){
+
+const categories = [
+"Hostel",
+"Transport",
+"Canteen",
+"Faculty",
+"Infrastructure",
+"Exam/Fee",
+"Ragging/Safety"
+];
+
+
+const categoryData =
+categories.map(cat =>
+complaints.filter(c =>
+c.category === cat
+).length
+);
+
+
+if(categoryChart)
+categoryChart.destroy();
+
+
+categoryChart = new Chart(
+document.getElementById("categoryChart"),
+{
+
+type:"doughnut",
+
+data:{
+
+labels:categories,
+
+datasets:[{
+
+data:categoryData
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+maintainAspectRatio:false
+
+}
+
+});
+
+
+const priorities =
+["Critical","High","Medium","Low"];
+
+
+const priorityData =
+priorities.map(p =>
+complaints.filter(c =>
+c.priority === p
+).length
+);
+
+
+if(priorityChart)
+priorityChart.destroy();
+
+
+priorityChart = new Chart(
+document.getElementById("priorityChart"),
+{
+
+type:"bar",
+
+data:{
+
+labels:priorities,
+
+datasets:[{
+
+label:"Complaints",
+
+data:priorityData
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+
+/* =====================================================
+ADMIN
+===================================================== */
+
+function renderAdmin(){
+
+const table =
+document.getElementById("adminTable");
+
+
+if(complaints.length === 0){
+
+table.innerHTML = `
+
+<tr>
+
+<td colspan="6"
+class="p-8 text-center text-xs text-slate-400">
+
+No complaints available.
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+
+table.innerHTML =
+complaints.map(c => `
+
+<tr class="border-b dark:border-slate-800">
+
+<td class="p-3 text-xs font-bold">
+#${c.id}
+</td>
+
+<td class="p-3 text-xs">
+${c.student}
+</td>
+
+<td class="p-3 text-xs max-w-xs">
+${c.title}
+</td>
+
+<td class="p-3 text-xs">
+${c.category}
+</td>
+
+<td class="p-3">
+
+<select
+onchange="adminPriority('${c.id}',this.value)"
+class="text-[10px] p-2 rounded-lg border">
+
+<option ${c.priority==="Critical"?"selected":""}>
+Critical
+</option>
+
+<option ${c.priority==="High"?"selected":""}>
+High
+</option>
+
+<option ${c.priority==="Medium"?"selected":""}>
+Medium
+</option>
+
+<option ${c.priority==="Low"?"selected":""}>
+Low
+</option>
+
+</select>
+
+</td>
+
+<td class="p-3">
+
+<select
+onchange="adminStatus('${c.id}',this.value)"
+class="text-[10px] p-2 rounded-lg border">
+
+<option ${c.status==="Pending"?"selected":""}>
+Pending
+</option>
+
+<option ${c.status==="In Progress"?"selected":""}>
+In Progress
+</option>
+
+<option ${c.status==="Resolved"?"selected":""}>
+Resolved
+</option>
+
+<option ${c.status==="Rejected"?"selected":""}>
+Rejected
+</option>
+
+</select>
+
+</td>
+
+</tr>
+
+`).join("");
+
+}
+
+
+function adminStatus(id,status){
+
+const c =
+complaints.find(x => x.id === id);
+
+if(c){
+
+c.status = status;
+
+saveComplaints();
+
+addNotification(
+`Ticket #${id} status changed to ${status}.`
+);
+
+renderAll();
+
+}
+
+}
+
+
+function adminPriority(id,priority){
+
+const c =
+complaints.find(x => x.id === id);
+
+if(c){
+
+c.priority = priority;
+
+saveComplaints();
+
+addNotification(
+`Ticket #${id} priority changed to ${priority}.`
+);
+
+renderAll();
+
+}
+
+}
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function saveComplaints(){
+
+localStorage.setItem(
+"eduvoice_complaints",
+JSON.stringify(complaints)
+);
+
+}
+
+
+function priorityClass(priority){
+
+if(priority === "Critical")
+return "bg-red-100 text-red-600";
+
+if(priority === "High")
+return "bg-rose-100 text-rose-600";
+
+if(priority === "Medium")
+return "bg-amber-100 text-amber-600";
+
+return "bg-emerald-100 text-emerald-600";
+
+}
+
+
+function renderRecent(){
+
+const box =
+document.getElementById("recentComplaints");
+
+
+if(complaints.length === 0){
+
+box.innerHTML = `
+
+<div class="text-center p-8 text-xs text-slate-400">
+
+No complaints yet.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+box.innerHTML =
+complaints.slice(0,5).map(c => `
+
+<div class="flex items-center justify-between
+p-4 border-b dark:border-slate-800">
+
+<div>
+
+<p class="text-xs font-bold">
+#${c.id} - ${c.title}
+</p>
+
+<p class="text-[10px] text-slate-400 mt-1">
+${c.category} • ${c.department}
+</p>
+
+</div>
+
+<div class="text-right">
+
+<span class="text-[10px] font-bold px-2 py-1 rounded-full
+${priorityClass(c.priority)}">
+
+${c.priority}
+
+</span>
+
+<p class="text-[10px] mt-2 text-slate-400">
+${c.status}
+</p>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function updateStats(){
+
+const total =
+complaints.length;
+
+const resolved =
+complaints.filter(c =>
+c.status === "Resolved"
+).length;
+
+const pending =
+complaints.filter(c =>
+c.status === "Pending"
+).length;
+
+const critical =
+complaints.filter(c =>
+c.priority === "Critical"
+).length;
+
+
+document.getElementById("totalStat").innerText =
+total;
+
+document.getElementById("resolvedStat").innerText =
+resolved;
+
+document.getElementById("pendingStat").innerText =
+pending;
+
+document.getElementById("criticalStat").innerText =
+critical;
+
+}
+
+
+function renderAll(){
+
+renderRecent();
+
+renderComplaints();
+
+updateStats();
+
+renderNotifications();
+
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+const login = document.getElementById("loginOverlay");
+const app = document.getElementById("mainApp");
+
+// ALWAYS show login page whenever the website is opened/refreshed.
+sessionStorage.removeItem("eduvoice_user");
+currentUser = null;
+
+login.classList.remove("hidden");
+app.classList.add("hidden");
+
+// Keep the complete website loaded behind the login overlay.
+renderAll();
+
+});
+
+</script>
+
+</body>
+</html>
